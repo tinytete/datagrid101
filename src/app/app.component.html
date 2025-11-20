@@ -1,83 +1,27 @@
-<div id = "dashboard">
-    <h1>Top Charts Fund</h1>
-    <div id="task-grid">
-<dx-data-grid 
-    id="gridContainer" 
-    [dataSource]="dataSource" 
-    [remoteOperations]="false"
-    id="gridContainer" 
-    [dataSource]="dataSource" 
-    [remoteOperations]="false"
-    [allowColumnReordering]="true"
-    [rowAlternationEnabled]="true"
-    [showBorders]="true"
-    [width]="'100%'"
-    (onContentReady)="contentReady($event)" 
-> 
-  <!-- กำหนดแบ่งหน้าโดยแสดงตาราง10แถว -->
-  <dxo-paging [pageSize]="10"></dxo-paging>
-  <!-- กำหนดควบคุมการเปลี่ยนหน้า -->
-  <dxo-pager 
-    [visible]="true"
-    [showPageSizeSelector]="true"
-    [allowedPageSizes]="[10, 25, 50, 100]"
-  ></dxo-pager>
-  <!-- เพิ่มช่องค้นหาด้านบนตาราง -->
-  <dxo-search-panel
-    [visible]="true"
-    [highlightCaseSensitive]="true"
-  ></dxo-search-panel>
-  <!-- เปิดใช้งานแบบจัดกลุ่ม -->
-  <dxo-group-panel [visible]="true"></dxo-group-panel>
-  <dxo-grouping [autoExpandAll]="false"></dxo-grouping>
-
-  <!-- เพื่อกำหนดคอลัมน์แต่ละคอลัมน์ใน Data Grid -->
-  <dxi-column dataField="Product" [groupIndex]="0"></dxi-column>
-  <dxi-column
-    dataField="Amount"
-    caption="Sale Amount"
-    dataType="number"
-    format="currency"
-    alignment="right"
-  ></dxi-column>
-  <dxi-column
-    caption="Discount %"
-    dataField="Discount"
-    cellTemplate="discountCellTemplate"
-    dataType="number"
-    format="percent"
-    alignment="right"
-    [allowGrouping]="false"
-    cssClass="bullet"
-  ></dxi-column>
-  <dxi-column dataField="SaleDate" dataType="date"></dxi-column>
-  <dxi-column dataField="Region" dataType="string"></dxi-column>
-  <dxi-column dataField="Sector" dataType="string"></dxi-column>
-  <dxi-column dataField="Channel" dataType="string"></dxi-column>
-  <dxi-column dataField="Customer" dataType="string" [width]="150"></dxi-column>
-
-  <!-- ส่วนนี้คือการใช้เทมเพลสของDxเพื่อสร้างการแสดงผลที่ซับซ้อนในคอลัมน์ -->
-  <div *dxTemplate="let d of 'discountCellTemplate'"> <!-- เพื่อใช้สร้างเนื้อหาในแต่ละเซลล์ในคอลัมน์โดย d คือตัวแปรในเซลล์นั้น -->
-    <div class="chart-cell"> 
-      <!-- สร้างกราฟBullet Chart -->
-      <dx-bullet
-        [showTarget]="false"
-        [showZeroLevel]="true"
-        [startScaleValue]="0"
-        [endScaleValue]="100"
-        [value]="d.value * 100"
-      >
-        <dxo-size [width]="150" [height]="35"></dxo-size>
-        <!-- ปรับแต่งtooltipของกราฟBullet Chart -->
-        <dxo-tooltip
-          [enabled]="true"
-          [paddingTopBottom]="2"
-          [customizeTooltip]="customizeTooltip"
-        >
-          <dxo-font [size]="18"></dxo-font>
-        </dxo-tooltip>
-        <dxo-margin [top]="5" [bottom]="0" [left]="5"></dxo-margin>
-      </dx-bullet>
-    </div>
-  </div>
-</dx-data-grid> 
+<dx-chart
+  id="chart"
+  title="Ice Hockey World Championship Gold Medal Winners"
+  [dataSource]="dataSource"
+>
+  <dxo-common-series-settings type="bar" argumentField="country">
+    <dxo-label [visible]="shouldBeDisabled"></dxo-label>
+  </dxo-common-series-settings>
+  <dxi-series name="Gold" valueField="gold" color="#ffd700"> </dxi-series>
+  <!-- <dxi-series name="Silver" valueField="silver" color="#c0c0c0"> </dxi-series>
+  <dxi-series name="Bronze" valueField="bronze" color="#cd7f32"> </dxi-series> -->
+  <dxo-argument-axis>
+    <dxo-label [visible]="true" template="labelTemplate"></dxo-label>
+  </dxo-argument-axis>
+  <svg overflow="visible" *dxTemplate="let data of 'labelTemplate'">
+    <!-- <image
+      filter="url(#DevExpress_shadow_filter)"
+      y="0"
+      width="60"
+      height="40"
+      attr.href="{{ getFilePath(data.valueText) }}"
+    ></image> -->
+    <text class="template-text" x="30" y="59" text-anchor="middle">
+      {{ data.valueText }}
+    </text>
+  </svg>
+</dx-chart>
